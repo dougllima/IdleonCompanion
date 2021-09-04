@@ -33,7 +33,7 @@
             @filter="onFilterRecipes"
           />
         </div>
-        <div class="w-1/2 md:w-1/6">
+        <div class="w-1/4 md:w-1/6">
           <q-input
             v-model.number="quantity"
             type="number"
@@ -52,6 +52,35 @@
             class="p-2"
           />
         </div>
+        <div class="w-1/4 md:w-1/6" v-if="displayType === 'List'">
+          <div class="p-3">
+            <q-btn round color="secondary" v-on:click="addRecipe()" label="+" />
+          </div>
+        </div>
+      </div>
+    </q-card-section>
+    <q-card-section>
+      <div v-if="recipesList.length && displayType === 'List'">
+        <q-list bordered separator class="rounded">
+          <q-item
+            clickable
+            v-for="{ label, quantity } in recipesList"
+            v-on:click="removeRecipe(label)"
+          >
+            <q-item-section avatar>
+              <ICAsset
+                size="small"
+                :image="Assets.MaterialImage(label)"
+                :title="label"
+              >
+                <template #tooltip>
+                  <div v-html="label"></div>
+                </template>
+              </ICAsset>
+            </q-item-section>
+            <q-item-section>{{ quantity }} {{ label }} </q-item-section>
+          </q-item>
+        </q-list>
       </div>
     </q-card-section>
     <q-card-section>
@@ -100,7 +129,7 @@
                 </template>
               </ICAsset>
             </q-item-section>
-            <q-item-section> {{ cost * quantity }} {{ node }} </q-item-section>
+            <q-item-section> {{ getCost(cost) }} {{ node }} </q-item-section>
           </q-item>
         </q-list>
       </div>
@@ -138,6 +167,33 @@ export default defineComponent({
     const displayType = ref<RecipeDisplay>("Tree");
     const displayTypeOptions = ["List", "Tree"];
 
+    const recipesList = ref(
+      [] as { label: string; value: string; quantity: number }[]
+    );
+
+    const removeRecipe = (label: string) => {
+      recipesList.value.splice(
+        recipesList.value.findIndex((item) => item.label == label),
+        1
+      );
+    };
+
+    const addRecipe = () => {
+      if (recipe.value) {
+        if (
+          !recipesList.value.some((item) => item.value == recipe.value?.value)
+        ) {
+          recipesList.value = [
+            ...recipesList.value,
+            { ...recipe.value, quantity: quantity.value },
+          ];
+        }
+      }
+    };
+
+    const getCost = (cost: number) =>
+      recipesList.value.length ? cost : cost * quantity.value;
+
     const addChildrenNodes = (current: RecipeNode): RecipeNode => {
       // Clone object to keep the original recipes with original materials.
       const result: RecipeNode = {
@@ -173,6 +229,18 @@ export default defineComponent({
       if (!recipe.value) {
         return [];
       }
+
+      if (recipesList.value.length && displayType.value == "List") {
+        return [
+          ...recipesList.value.map((item) =>
+            addChildrenNodes({
+              ...recipes[item.value],
+              quantity: item.quantity,
+            })
+          ),
+        ];
+      }
+
       return [addChildrenNodes(recipes[recipe.value.value])];
     });
 
@@ -184,23 +252,23 @@ export default defineComponent({
       const flatten = (current: RecipeNode, result: Record<string, number>) => {
         if (current.materials) {
           current.materials.forEach(({ name, quantity }) => {
-            const newQuantity = quantity * current.quantity;
+            // const newQuantity = quantity * current.quantity;
             if (recipes[name]) {
               const newRecipe = {
                 ...recipes[name],
-                quantity: newQuantity,
+                quantity: quantity,
               };
               flatten(newRecipe, result);
             } else {
               if (!(name in result)) {
                 result[name] = 0;
               }
-              result[name] += newQuantity;
+              result[name] += quantity;
             }
           });
         }
       };
-      flatten(nodes.value[0], result);
+      nodes.value.forEach((node) => flatten(node, result));
       return result;
     });
 
@@ -238,6 +306,10 @@ export default defineComponent({
       recipe,
       recipes,
       wikiLinks,
+      recipesList,
+      addRecipe,
+      removeRecipe,
+      getCost,
     };
   },
 });
