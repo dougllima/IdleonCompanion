@@ -1,7 +1,9 @@
-import { Character } from "./Characters";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { computed } from "vue";
 import { useQuasar } from "quasar";
+import numeral from "numeral";
+
+import { Character } from "~/composables/Characters";
 
 export type GrowthFunc = (a: number, b: number, c: number) => number;
 
@@ -48,10 +50,14 @@ export class Assets {
     return Assets.FromDir(c, "classes");
   }
 
-  static FromDir(item: string, dir: string): string {
+  static FromDir(item: string, dir: string, extension?: string): string {
     const cleaned = item.replace(/ /g, "_");
     // Use base URL here for GH pages support
-    return import.meta.env.BASE_URL + `assets/${dir}/${cleaned}.png`;
+    return (
+      import.meta.env.BASE_URL +
+      `assets/${dir}/${cleaned}.` +
+      (extension ?? "png")
+    );
   }
 
   static IconImage(icon: string): string {
@@ -64,6 +70,10 @@ export class Assets {
 
   static MiscImage(item: string): string {
     return Assets.FromDir(item, "misc");
+  }
+
+  static MonsterAnimated(name: string): string {
+    return Assets.FromDir(name, "monsters", "gif");
   }
 
   static StampImage(item: string): string {
@@ -263,4 +273,16 @@ export function useMoney() {
   return {
     splitCoinsFromValue,
   };
+}
+
+export const useNumberAbbr = (n: number) => numeral(n).format("0a.[000]");
+
+// Common durations in milliseconds
+export enum Time {
+  Millisecond = 1,
+  Second = Time.Millisecond * 1000,
+  Minute = Time.Second * 60,
+  Hour = Time.Minute * 60,
+  Day = Time.Hour * 24,
+  Week = Time.Day * 7,
 }
