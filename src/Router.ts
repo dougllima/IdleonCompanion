@@ -9,6 +9,7 @@ import PackMuleCrafter from "~/pages/tools/PackMuleCrafter.vue";
 import PicnicQuest from "~/pages/tools/PicnicQuest.vue";
 import ProgressTracker from "~/components/tracker/ProgressTracker.vue";
 import RecipeCalculator from "~/pages/tools/RecipeCalculator.vue";
+import RefinaryOptmizer from "~/pages/tools/RefinaryOptmizer.vue";
 import StampTracker from "~/components/tracker/StampTracker.vue";
 import StatueTracker from "~/components/tracker/StatueTracker.vue";
 import SweetSpot from "~/pages/SweetSpot.vue";
@@ -55,6 +56,11 @@ export const toolRoutes: RouteRecordRaw[] = [
     name: "Recipe Calculator",
     path: "/tools/recipe-calculator",
   },
+  {
+    component: RefinaryOptmizer,
+    name: "Refinary Optmizer",
+    path: "/tools/refinary-optmizer",
+  }
 ];
 
 export const tabRoutes: RouteRecordRaw[] = [

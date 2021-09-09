@@ -227,7 +227,7 @@ export default defineComponent({
 
     const nodes = computed((): RecipeNode[] => {
       if (!recipe.value) {
-        return [];
+        return [];Frecip
       }
 
       if (recipesList.value.length && displayType.value == "List") {

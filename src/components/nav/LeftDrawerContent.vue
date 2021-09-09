@@ -91,6 +91,10 @@ const tabs: NavigationTab[] = [
         name: "Recipe Calculator",
         path: "/tools/recipe-calculator",
       },
+      {
+        name: "Refinary Optmizer",
+        path: "/tools/refinary-optmizer"
+      },
     ],
   },
   {
