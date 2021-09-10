@@ -61,11 +61,13 @@
     </q-card-section>
     <q-card-section>
       <div v-if="recipesList.length && displayType === 'List'">
+        <div class="text-xl">Recipes</div>
         <q-list bordered separator class="rounded">
           <q-item
             clickable
             v-for="{ label, quantity } in recipesList"
             v-on:click="removeRecipe(label)"
+            :key="label"
           >
             <q-item-section avatar>
               <ICAsset

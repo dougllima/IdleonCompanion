@@ -1,5 +1,6 @@
 export type Salt = {
   name: string
+  isOn: boolean
   rank: RefineryRank;
   type: 'COMBUSTION' | 'SYNTHESIS'
   baseCycleTime: 3600000 | 900000 // Time in Millisecond
@@ -40,6 +41,7 @@ export const salts: Salt[] = [
   {
     name: 'Redox Salts',
     rank: { ...ranks[0] },
+    isOn: true,
     type: 'COMBUSTION',
     baseCycleTime: 900000,
     resource: [
@@ -49,7 +51,8 @@ export const salts: Salt[] = [
   },
   {
     name: 'Explosive Salts',
-    rank: { ...ranks[0] },
+    rank: { ...ranks[2] },
+    isOn: true,
     type: 'COMBUSTION',
     baseCycleTime: 900000,
     resource: [
@@ -61,6 +64,7 @@ export const salts: Salt[] = [
   {
     name: 'Spontaneity Salts',
     rank: { ...ranks[0] },
+    isOn: false,
     type: 'COMBUSTION',
     baseCycleTime: 900000,
     resource: [
@@ -73,6 +77,7 @@ export const salts: Salt[] = [
   {
     name: 'Dioxide Synthesis',
     rank: { ...ranks[0] },
+    isOn: false,
     type: 'SYNTHESIS',
     baseCycleTime: 3600000,
     resource: [
@@ -85,6 +90,7 @@ export const salts: Salt[] = [
   {
     name: 'Red Salt',
     rank: { ...ranks[0] },
+    isOn: false,
     type: 'SYNTHESIS',
     baseCycleTime: 3600000,
     resource: [
@@ -97,6 +103,7 @@ export const salts: Salt[] = [
   }, {
     name: 'Red Salt 2',
     rank: { ...ranks[0] },
+    isOn: false,
     type: 'SYNTHESIS',
     baseCycleTime: 3600000,
     resource: [
