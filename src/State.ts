@@ -12,36 +12,37 @@ import { version } from "../package.json";
 import firebase from "firebase/app";
 
 const StorageKey = "idleon-companion";
-export const useState = createGlobalState(() =>
-  useStorage(StorageKey, {
-    alchemy: {
-      goals: {
-        Orange: [],
-        Green: [],
-        Purple: [],
-        Yellow: [],
-      },
-      upgrades: {
-        Orange: [],
-        Green: [],
-        Purple: [],
-        Yellow: [],
-      },
-      vials: {},
-    } as AlchemyData,
-    cards: {} as Record<string, number>,
-    chars: [] as Character[],
-    checklist: {} as Record<string, boolean>,
-    stamps: {} as Record<string, number>,
-    starSigns: {} as Record<string, boolean>,
-    statues: {} as Record<StatueName, StatueInfo>,
-    tasks: {
-      dailyReset: "12:00",
-      tasks: Array<Task>(),
-      timers: Array<Timer>(),
+export const DefaultState = {
+  alchemy: {
+    goals: {
+      Orange: [],
+      Green: [],
+      Purple: [],
+      Yellow: [],
     },
-    version: "0.2.0",
-  })
+    upgrades: {
+      Orange: [],
+      Green: [],
+      Purple: [],
+      Yellow: [],
+    },
+    vials: {},
+  } as AlchemyData,
+  cards: {} as Record<string, number>,
+  chars: [] as Character[],
+  checklist: {} as Record<string, boolean>,
+  stamps: {} as Record<string, number>,
+  starSigns: {} as Record<string, boolean>,
+  statues: {} as Record<StatueName, StatueInfo>,
+  tasks: {
+    dailyReset: "12:00",
+    tasks: Array<Task>(),
+    timers: Array<Timer>(),
+  },
+  version: "0.2.0",
+};
+export const useState = createGlobalState(() =>
+  useStorage(StorageKey, DefaultState)
 );
 
 export function versionControl() {
@@ -95,7 +96,11 @@ export function versionControl() {
     const newSkills = ["Trapping", "Construction", "Worship"] as const;
 
     for (const key in state.value.chars) {
-      for (const s of newSkills) state.value.chars[key].skills[s] = 0;
+      for (const s of newSkills) {
+        if (!(s in state.value.chars[key].skills)) {
+          state.value.chars[key].skills[s] = 0;
+        }
+      }
     }
   }
   // Add new bubble slots and a goals field for each bubble
@@ -114,7 +119,9 @@ export function versionControl() {
       for (let i = 0; i < amount; i++) {
         state.value.alchemy.upgrades[k][i] =
           state.value.alchemy.upgrades[k][i] ?? 0;
-        state.value.alchemy.goals[k][i] = state.value.alchemy.goals[k][i] ?? 0;
+        state.value.alchemy.goals[k][i] =
+          state.value.alchemy.goals[k][i] ??
+          state.value.alchemy.upgrades[k][i] + 1;
       }
     }
   }
@@ -124,20 +131,24 @@ export function versionControl() {
       state.value.statues = {} as Record<StatueName, StatueInfo>;
     }
     for (const statue of Object.keys(Statues) as Array<StatueName>) {
-      state.value.statues[statue] = {
-        golden: false,
-        level: 0,
-        progress: 0,
-      };
+      if (!state.value.statues[statue]){
+        state.value.statues[statue] = {
+          golden: false,
+          level: 0,
+          progress: 0,
+        };
+      }
     }
     // Remove statues from character state
     for (const index in state.value.chars) {
       delete (state.value.chars[index] as Character & { statues: any }).statues;
     }
     // Add stamp tracking data
-    state.value.stamps = {};
-    for (const stamp of Object.values(Stamps)) {
-      state.value.stamps[stamp.name] = 0;
+    if (!state.value.stamps) {
+      state.value.stamps = {};
+      for (const stamp of Object.values(Stamps)) {
+        state.value.stamps[stamp.name] = 0;
+      }
     }
     // Reset tasks/daily reset timer
     state.value.tasks = {
@@ -155,6 +166,14 @@ export function versionControl() {
           state.value.chars[key].class;
         delete (state.value.chars[key] as Character & { subclass: any })
           .subclass;
+      }
+    }
+    // Also, change cards to be stored without underscores for API imports
+    for (const key in state.value.cards) {
+      // Only replace keys that have underscores
+      if (key.includes("_")) {
+        state.value.cards[key.replace(/_/g, " ")] = state.value.cards[key];
+        delete state.value.cards[key];
       }
     }
   }

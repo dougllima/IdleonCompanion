@@ -76,6 +76,10 @@ export class Assets {
     return Assets.FromDir(name, "monsters", "gif");
   }
 
+  static NPCAnimated(name: string): string {
+    return Assets.FromDir(name, "npc", "gif");
+  }
+
   static StampImage(item: string): string {
     return Assets.FromDir(item, "stamps");
   }
@@ -209,6 +213,22 @@ enum BonusEffects {
   MinigameReward = "% Minigame Reward",
 }
 
+enum DungeonEffects {
+  DungeonBossDamage = "Base Dungeon Damage",
+  DungeonCardChance = "% Dungeon Card Chance",
+  DungeonMoney = "% Dungeon Money",
+  DungeonDamage = "Base Dungeon Damage",
+  DungeonMP = "Base Dungeon MP",
+  BlockChance = "% Block Chance",
+  DungeonCredits = "% Dungeon Credits",
+  RNGItem = "% to start with RNG Item",
+  RNGRarity = "% RNG Rarity",
+  DungeonFlurbos = "% Dungeon Flurbos",
+  DungeonHP = "Base Dungeon HP",
+  DungeonMPRegen = "% Dungeon MP Regen",
+  DungeonDropRate = "% Dungeon Drop Rate",
+}
+
 export const Effects = {
   ...BaseEffects,
   ...MultiplierEffects,
@@ -216,13 +236,23 @@ export const Effects = {
   ...SkillEffects,
   ...PassiveEffects,
   ...BonusEffects,
+  ...DungeonEffects,
 };
 
 type ValueOf<T> = T[keyof T];
 export type EffectData = ValueOf<typeof Effects>;
 
 // Game Versions
-export const GameVersions = <const>["1.23", "1.22", "1.21", "1.20"];
+export const GameVersions = <const>[
+  "1.42",
+  "1.40b",
+  "1.40",
+  "1.30",
+  "1.23",
+  "1.22",
+  "1.21",
+  "1.20",
+];
 export type GameVersion = typeof GameVersions[number];
 export const LatestGameVersion: GameVersion = GameVersions[0];
 

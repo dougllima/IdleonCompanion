@@ -22,15 +22,17 @@ export const build: Build = {
     {
       skills: {
         "1": "100",
-        "2": "1*",
+        "2": "*2",
         "4": "100",
-        "5": "1*",
-        "11": "1*",
-        "14": "1*",
-        "15": "1*",
+        "6": "100",
+        "7": "*1",
+        "9": "*1",
+        "11": "*2",
+        "14": "*2",
+        "15": "*2",
       },
       comment:
-        "Two Punch Man and Combat Skills effect AFK gain.\n*1 - At this point, you can start putting some points into non-combat bonuses, depending on what you are looking for",
+        "Max Two Punch Man and Indiana Attack. Then, points can be placed into Lucky Hit.\n*1 Excess points split between F\'luk\'ey Fabrics and Lucky Horseshoe.\n*2 Excess points can instead be placed into non-combat bonuses, depending on what you're looking for.",
     },
   ],
   class: Class.Journeyman,

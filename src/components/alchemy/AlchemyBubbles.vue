@@ -5,7 +5,7 @@
       <q-input
         v-model.number="cauldronLevel"
         type="number"
-        label="Cauldron Level"
+        label="Cauldron Boost Cost Level"
         filled
         :min="0"
       />
@@ -27,9 +27,9 @@
       </div>
     </div>
     <div class="flex flex-col justify-end px-2">
-      <div class="text-lg">Orange Bargain</div>
+      <div class="text-lg">Bargain Bubble</div>
       <div class="text-secondary p-1">
-        {{ `-${discount["Orange Bargain"].toFixed(1)}%` }}
+        {{ `-${discount["Bargain Bubble"].toFixed(1)}%` }}
       </div>
     </div>
     <div class="flex flex-col justify-end px-2">
@@ -37,6 +37,15 @@
       <div class="text-secondary p-1">
         {{ `-${discount["Underdeveloped Costs/Barley Brew"].toFixed(1)}%` }}
       </div>
+    </div>
+    <div class="flex flex-col justify-end px-2">
+      <div class="text-lg">Obtained S-M-R-T</div>
+      <div class="q-gutter-sm">
+      <q-checkbox
+        v-model="hasAchievement"
+        color="secondary"
+      />
+    </div>
     </div>
     <div class="flex flex-col justify-end px-2 text-green-500">
       <div class="text-lg">Total Discount</div>
@@ -122,14 +131,16 @@ export default defineComponent({
     const { calculateBubbleDiscount } = useAlchemy();
 
     const currentCauldron = ref<AlchemyColor>("Orange");
+    const hasAchievement = ref<number>(0);
 
     const cauldronLevel = ref(0);
     const bargainTagLevel = ref(0);
 
-    const orangeBargain = computed(() =>
-      currentCauldron.value === "Orange"
-        ? alchemy.value.upgrades["Orange"][AlchemyConst.OrangeBargain]
-        : 0
+    const bargainBubble = computed(
+      () =>
+        alchemy.value.upgrades[currentCauldron.value][
+          AlchemyConst.BargainBubble
+        ] ?? 0
     );
     const undevCosts = computed(
       () => alchemy.value.upgrades["Yellow"][AlchemyConst.UnderdevelopedCosts]
@@ -143,13 +154,15 @@ export default defineComponent({
       Assets,
       bargainTagLevel,
       bubbleCount: AlchemyConst.BubbleCount,
+      hasAchievement,
       discount: computed(() =>
         calculateBubbleDiscount(
           cauldronLevel.value,
           bargainTagLevel.value,
-          orangeBargain.value,
+          bargainBubble.value,
           undevCosts.value,
-          barleyBrew.value
+          barleyBrew.value,
+          hasAchievement.value,
         )
       ),
       cauldronLevel,

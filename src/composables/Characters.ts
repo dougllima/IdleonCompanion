@@ -69,13 +69,13 @@ export const getClassTree = (class_: Class): Class[] => {
 
 export const Skills = [
   "Mining",
-  "Smithing",
-  "Choppin'",
   "Fishing",
-  "Alchemy",
-  "Catching",
   "Trapping",
+  "Smithing",
+  "Alchemy",
   "Construction",
+  "Choppin'",
+  "Catching",
   "Worship",
 ] as const;
 export type Skill = typeof Skills[number];
@@ -85,20 +85,22 @@ export class Character {
   public class: Class;
   public level: number;
   public name: string;
-  public items: Record<string, boolean>;
-  public skills: Record<Skill, number>;
   public constellations: Record<string, boolean>;
+  public items: Record<string, boolean>;
+  public quests: Record<string, boolean>;
+  public skills: Record<Skill, number>;
   public starSigns: Record<string, boolean>;
 
   constructor() {
     this.class = Class.Beginner;
     this.level = 1;
     this.name = "";
+    this.constellations = {};
     this.items = {};
+    this.quests = {};
     this.skills = <Record<Skill, number>>(
       Object.fromEntries(Skills.map((x) => [x, 0]))
     );
-    this.constellations = {};
     this.starSigns = {};
   }
 

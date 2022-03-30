@@ -51,6 +51,9 @@
             outlined
             type="number"
             class="mr-2 mb-2 w-1/2 md:w-1/3 lg:w-1/4"
+            :min="0"
+            :max="9999"
+            :rules="[clampSkill()]"
           >
             <template v-slot:prepend>
               <Tooltip>
@@ -119,6 +122,12 @@ export default defineComponent({
       onDeleteCurrentCharacter,
       onSetClass,
     };
+  },
+
+  methods: {
+    clampSkill() {
+      return (val: number) => (val >= 0 && val <= 9999) || 'Skill values must be 0-9999'
+    }
   },
 });
 </script>

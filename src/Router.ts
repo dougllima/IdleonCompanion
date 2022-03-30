@@ -5,9 +5,11 @@ import Builds from "~/pages/Builds.vue";
 import Cards from "~/pages/Cards.vue";
 import Characters from "~/pages/Characters.vue";
 import Credits from "~/pages/Changelog.vue";
+import Import from "~/pages/Import.vue";
 import PackMuleCrafter from "~/pages/tools/PackMuleCrafter.vue";
 import PicnicQuest from "~/pages/tools/PicnicQuest.vue";
 import ProgressTracker from "~/components/tracker/ProgressTracker.vue";
+import QuestTracker from "~/components/tracker/QuestTracker.vue";
 import RecipeCalculator from "~/pages/tools/RecipeCalculator.vue";
 import StampTracker from "~/components/tracker/StampTracker.vue";
 import StatueTracker from "~/components/tracker/StatueTracker.vue";
@@ -36,6 +38,11 @@ export const trackerRoutes: RouteRecordRaw[] = [
     component: Alchemy,
     name: "Alchemy",
     path: "/tracker/alchemy",
+  },
+  {
+    component: QuestTracker,
+    name: "Quests",
+    path: "/tracker/quests",
   },
 ];
 
@@ -92,6 +99,11 @@ export const tabRoutes: RouteRecordRaw[] = [
     component: Credits,
     name: "Changelog",
     path: "/changelog",
+  },
+  {
+    component: Import,
+    name: "Import",
+    path: "/import",
   },
 ];
 

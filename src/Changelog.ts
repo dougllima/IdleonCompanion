@@ -154,4 +154,52 @@ export const Changelog: ChangelogEntry[] = [
     },
     date: "August 2021",
   },
+  {
+    version: "0.3.1 (Builds Update)",
+    changes: {
+      changes: [
+        "Builds: A variety of builds have been updated on the website. Some new builds were added.",
+      ],
+    },
+    date: "August 2021",
+  },
+  {
+    version: "0.3.2 (SweetSpot Update)",
+    changes: {
+      changes: [
+        "SweetSpot: World 3 is now included in the calculator! Calculation of the Average hit to kill has been refined. A \"Calculate\" button has been added to prevent uneeded computation. In-depth Table has been made easier to view"
+      ],
+    },
+    date: "October 2021",
+  },
+  {
+    version: "0.3.3 (Bugfixes)",
+    changes: {
+      fixes: [
+        "Statues: Statues are now able to be imported",
+        "Stamps: Image of Sukka Foo and Steve Sword now show correctly",
+        "Cards: Name and source of Summer Cards updated"
+      ],
+    },
+    date: "October 2021",
+  },
+  {
+    version: "1.0.0 (Imports are Here!)",
+    changes: {
+      changes: [
+        "Import: The import sidepannel has been introduced! Use tools created by our idleon community to generate a JSON file with all your character info! Import this file and all your progress in the Idleon Companion is automatically filled! The tool is able to take your data from the Steam Version!",
+      ],
+    },
+    date: "October 2021",
+  },
+  {
+    version: "1.0.1 (Stamps & Alchemy Bugfixes)",
+    changes: {
+      fixes: [
+        "Stamps: Costs are now accurate",
+        "Alchemy: Costs are now accurate. Introduced checkbox for SMRT achievement."
+      ],
+    },
+    date: "October 2021",
+  },
 ];

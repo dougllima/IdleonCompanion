@@ -1,3 +1,4 @@
+import { connect } from "http2";
 import { Growth } from "~/composables/Utilities";
 import bubbleData from "~/data/bubbles.json";
 
@@ -61,7 +62,7 @@ export const Vials: Vial[] = [
     effect: "Water Droplet max capacity",
   },
   {
-    name: "Dieter Drenk",
+    name: "Dieter Drink",
     roll: 40,
     material: "Bean_Slices",
     base: 1,
@@ -75,7 +76,7 @@ export const Vials: Vial[] = [
     effect: "% Class EXP when converting",
   },
   {
-    name: "Skinny O Cal",
+    name: "Skinny 0 Cal",
     roll: 60,
     material: "Snake_Skin",
     base: 2.5,
@@ -103,14 +104,14 @@ export const Vials: Vial[] = [
     effect: "% Card Drop rate",
   },
   {
-    name: "Tea with Pea",
+    name: "Tea With Pea",
     roll: 75,
     material: "Potty_Rolls",
     base: 3,
     effect: "% Liquid Nitrogen max capacity",
   },
   {
-    name: "Gold Guzzler",
+    name: "Gold Guzzle",
     roll: 83,
     material: "Gold_Ore",
     base: 1,
@@ -131,7 +132,7 @@ export const Vials: Vial[] = [
     effect: " chance for a kill to count double",
   },
   {
-    name: "Fly in my Drink",
+    name: "Fly In My Drink",
     roll: 87,
     material: "Fly",
     base: 3,
@@ -180,7 +181,7 @@ export const Vials: Vial[] = [
     effect: "% higher Shiny Critter chance.",
   },
   {
-    name: "Slippy Soul",
+    name: "Sippy Soul",
     roll: 75,
     material: "Forest Soul",
     base: 1,
@@ -292,7 +293,7 @@ export const Vials: Vial[] = [
     effect: "Talent Point for Tab 3",
   },
   {
-    name: "40 40 Purity",
+    name: "40-40 Purity",
     roll: 98,
     material: "Contact Lense",
     base: 3,
@@ -325,7 +326,7 @@ export type AlchemyData = {
 
 export type AlchemyColor = "Orange" | "Green" | "Purple" | "Yellow";
 export const AlchemyConst = {
-  OrangeBargain: 14,
+  BargainBubble: 14,
   BubbleCount: 15,
   BarleyBrew: "Barley Brew",
   UnderdevelopedCosts: 6,
@@ -336,9 +337,10 @@ export function useAlchemy() {
   const calculateBubbleDiscount = (
     cauldronLevel: number,
     bargainTagLevel: number,
-    orangeBargain: number,
+    bargainBubble: number,
     undevCosts: number,
-    barleyBrew: number
+    barleyBrew: number,
+    hasAchievement: number,
   ) => {
     const precision = Math.pow(10, 4);
 
@@ -347,19 +349,20 @@ export function useAlchemy() {
     const oa = Math.max(0.1, 1 - costReduxBoost / 100); // TODO: This one is off, but the total calculation is still correct
     const newBubble = Math.max(
       0.05,
-      1 - Growth.Decay(orangeBargain, 40, 12) / 100
+      1 - Growth.Decay(bargainBubble, 40, 12) / 100
     ); // Hardcoded values, better to retrieve from bubbles data maybe.
     const undevCost = Growth.Decay(undevCosts, 40, 70);
     const vial = Growth.Add(barleyBrew, 1, 0);
     const undev_vial = Math.max(0.05, 1 - (undevCost + vial) / 100);
     const bargain_tag = Math.max(Math.pow(0.75, bargainTagLevel), 0.1);
-    const discount = oa * newBubble * undev_vial * bargain_tag;
+    const achieve_discount = hasAchievement ? 0.90 : 1;
+    const discount = oa * newBubble * undev_vial * bargain_tag * achieve_discount;
     const roundToPrecision = (n: number): number =>
       (precision - Math.round(n * precision)) / 100;
     return {
       Cauldron: roundToPrecision(oa),
       "Bargain Tag": roundToPrecision(bargain_tag),
-      "Orange Bargain": roundToPrecision(newBubble),
+      "Bargain Bubble": roundToPrecision(newBubble),
       "Underdeveloped Costs/Barley Brew": roundToPrecision(undev_vial),
       Total: roundToPrecision(discount),
     };

@@ -58,6 +58,10 @@ const tabs: NavigationTab[] = [
         name: "Alchemy",
         path: "/tracker/alchemy",
       },
+      {
+        name: "Quests",
+        path: "/tracker/quests",
+      },
     ],
   },
   {
@@ -92,6 +96,10 @@ const tabs: NavigationTab[] = [
         path: "/tools/recipe-calculator",
       },
     ],
+  },
+  {
+    name: "Import",
+    path: "/import",
   },
   {
     name: "Changelog",
